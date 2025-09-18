@@ -19,6 +19,31 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        
+        /* Theta semantic colors */
+        surface: {
+          low: "hsl(var(--surface-low))",
+          mid: "hsl(var(--surface-mid))",
+        },
+        text: {
+          secondary: "hsl(var(--text-secondary))",
+        },
+        
+        /* Brand accent system */
+        brand: {
+          primary: "hsl(var(--accent-primary))",
+          glow: "hsl(var(--accent-glow))",
+          muted: "hsl(var(--accent-muted))",
+        },
+        
+        /* Glassmorphism colors */
+        glass: {
+          bg: "hsl(var(--glass-bg))",
+          border: "hsl(var(--glass-border))",
+          highlight: "hsl(var(--glass-highlight))",
+        },
+        
+        /* Component colors mapped to Theta system */
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -65,25 +90,70 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
+        
+        /* Theta motion system - respects prefers-reduced-motion */
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(4px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        "fade-out": {
+          "0%": { opacity: "1", transform: "translateY(0)" },
+          "100%": { opacity: "0", transform: "translateY(4px)" }
+        },
+        "scale-in": {
+          "0%": { opacity: "0", transform: "scale(0.96)" },
+          "100%": { opacity: "1", transform: "scale(1)" }
+        },
+        "slide-up": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        "slide-in-right": {
+          "0%": { opacity: "0", transform: "translateX(8px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" }
+        },
+        "glow-pulse": {
+          "0%, 100%": { 
+            boxShadow: "0 0 0 0 hsl(var(--accent-primary) / 0.4)",
+            transform: "scale(1)"
+          },
+          "50%": { 
+            boxShadow: "0 0 20px 4px hsl(var(--accent-primary) / 0.1)",
+            transform: "scale(1.01)"
+          }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        
+        /* Theta animations */
+        "fade-in": "fade-in 0.2s ease-out",
+        "fade-out": "fade-out 0.2s ease-in",
+        "scale-in": "scale-in 0.15s ease-out",
+        "slide-up": "slide-up 0.2s ease-out",
+        "slide-in-right": "slide-in-right 0.2s ease-out",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+      },
+      
+      /* Theta spacing system */
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '92': '23rem',
+        '128': '32rem',
+      },
+      
+      /* Theta font system */
+      fontFamily: {
+        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'system-ui', 'sans-serif'],
       },
     },
   },
