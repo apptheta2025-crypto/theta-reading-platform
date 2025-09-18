@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Search, Grid3X3, Bell, User, Crown, Heart } from 'lucide-react';
+import { Search, Grid3X3, Bell, User, Crown, Heart, LogOut, Settings } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { 
   Popover, 
   PopoverContent, 
@@ -10,6 +13,7 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { useMode } from '@/contexts/ModeContext';
+import { useAuth } from '@/contexts/AuthContext';
 import ModeToggle from '@/components/ui/ModeToggle';
 import FilterChips from '@/components/ui/FilterChips';
 
@@ -29,17 +33,30 @@ const GlassHeader: React.FC<GlassHeaderProps> = ({
     { id: 1, title: 'New audiobook added', type: 'update', time: '2h ago' },
     { id: 2, title: 'Your download is complete', type: 'info', time: '4h ago' },
   ]);
+  
+  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  const getInitials = (name: string | null | undefined) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
 
   return (
     <header className="glass-header sticky top-0 z-50 h-16 flex items-center justify-between px-6">
       {/* Left section - Brand */}
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
             <span className="text-sm font-bold text-white">Θ</span>
           </div>
           <span className="font-semibold text-foreground hidden sm:block">Theta</span>
-        </div>
+        </Link>
       </div>
 
       {/* Center section - Search */}
@@ -133,52 +150,70 @@ const GlassHeader: React.FC<GlassHeaderProps> = ({
           </PopoverContent>
         </Popover>
 
-        {/* Profile menu */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="p-2 hover:bg-surface-mid/50"
-              aria-label="Profile menu"
-            >
-              <User className="w-5 h-5" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent 
-            className="glass-popover w-64 p-0" 
-            align="end"
-            sideOffset={8}
-          >
-            <div className="p-4 border-b border-border">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-brand-primary rounded-full flex items-center justify-center">
-                  <span className="text-sm font-medium text-white">U</span>
-                </div>
-                <div>
-                  <p className="font-medium text-foreground">User</p>
-                  <p className="text-sm text-text-secondary">Free Plan</p>
+        {/* Profile/Auth menu */}
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={profile?.avatar_url || ''} alt={profile?.display_name || 'Profile'} />
+                  <AvatarFallback className="bg-brand-primary text-white text-sm">
+                    {getInitials(profile?.display_name || user.email)}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="glass-popover w-56" align="end" sideOffset={8}>
+              <div className="flex items-center justify-start gap-2 p-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={profile?.avatar_url || ''} alt={profile?.display_name || 'Profile'} />
+                  <AvatarFallback className="bg-brand-primary text-white text-sm">
+                    {getInitials(profile?.display_name || user.email)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium text-foreground">
+                    {profile?.display_name || 'User'}
+                  </p>
+                  <p className="text-xs text-text-secondary">
+                    {user.email}
+                  </p>
                 </div>
               </div>
-            </div>
-            <div className="p-2">
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start gap-2 text-text-secondary hover:text-foreground"
-              >
-                <User className="w-4 h-4" />
-                Profile
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/profile" className="flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/profile" className="flex items-center gap-2">
+                  <Settings className="w-4 h-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2">
+                <LogOut className="w-4 h-4" />
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <div className="flex items-center gap-2">
+            <Link to="/login">
+              <Button variant="ghost" size="sm">
+                Sign in
               </Button>
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start gap-2 text-text-secondary hover:text-foreground"
-              >
-                <Heart className="w-4 h-4" />
-                Liked Items
+            </Link>
+            <Link to="/signup">
+              <Button variant="outline" size="sm">
+                Sign up
               </Button>
-            </div>
-          </PopoverContent>
-        </Popover>
+            </Link>
+          </div>
+        )}
 
         {/* CTA Buttons */}
         <Button 
