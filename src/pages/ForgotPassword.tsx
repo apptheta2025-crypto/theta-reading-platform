@@ -115,6 +115,9 @@ const ForgotPassword: React.FC = () => {
         </CardHeader>
         
         <CardContent>
+          <div role="status" aria-live="polite" className="sr-only">
+            {isLoading ? "Sending reset email..." : isEmailSent ? "Reset email sent" : "Ready to send reset email"}
+          </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground">Email</Label>

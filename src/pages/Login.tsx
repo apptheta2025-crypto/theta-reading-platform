@@ -115,6 +115,9 @@ const Login: React.FC = () => {
         </CardHeader>
         
         <CardContent>
+          <div role="status" aria-live="polite" className="sr-only">
+            {isLoading ? "Processing authentication..." : "Ready for sign in"}
+          </div>
           <Tabs defaultValue="email" className="space-y-6">
             <TabsList className="grid w-full grid-cols-3 bg-surface-mid">
               <TabsTrigger value="email" className="text-sm">Email</TabsTrigger>

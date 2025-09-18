@@ -132,6 +132,9 @@ const ResetPassword: React.FC = () => {
         </CardHeader>
         
         <CardContent>
+          <div role="status" aria-live="polite" className="sr-only">
+            {isLoading ? "Updating password..." : "Ready to set new password"}
+          </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="password" className="text-foreground">New Password</Label>

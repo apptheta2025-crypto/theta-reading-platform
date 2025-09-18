@@ -117,6 +117,9 @@ const SignUp: React.FC = () => {
         </CardHeader>
         
         <CardContent>
+          <div role="status" aria-live="polite" className="sr-only">
+            {isLoading ? "Processing registration..." : "Ready for sign up"}
+          </div>
           <Tabs defaultValue="email" className="space-y-6">
             <TabsList className="grid w-full grid-cols-2 bg-surface-mid">
               <TabsTrigger value="email" className="text-sm">Email</TabsTrigger>

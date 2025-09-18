@@ -44,6 +44,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
+  const createProfile = async (userId: string, displayName?: string) => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .insert({
+          id: userId,
+          display_name: displayName || null,
+        });
+      
+      if (error && error.code !== '23505') { // Ignore duplicate key error
+        console.error('Error creating profile:', error);
+        return { error };
+      }
+      
+      return { error: null };
+    } catch (error) {
+      console.error('Error creating profile:', error);
+      return { error: error as Error };
+    }
+  };
+
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data: profileData, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
+      
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching profile:', error);
+      } else {
+        setProfile(profileData);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -52,23 +91,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Fetch user profile
+          // Create profile if it doesn't exist, then fetch
           setTimeout(async () => {
-            try {
-              const { data: profileData, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', session.user.id)
-                .maybeSingle();
-              
-              if (error && error.code !== 'PGRST116') {
-                console.error('Error fetching profile:', error);
-              } else {
-                setProfile(profileData);
-              }
-            } catch (error) {
-              console.error('Error fetching profile:', error);
-            }
+            await createProfile(session.user.id, session.user.user_metadata?.display_name);
+            await fetchProfile(session.user.id);
           }, 0);
         } else {
           setProfile(null);
@@ -88,6 +114,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
+  const getErrorMessage = (error: AuthError) => {
+    if (error.message.includes('Invalid login credentials')) {
+      return 'Invalid email or password. Please check your credentials and try again.';
+    }
+    if (error.message.includes('Email not confirmed')) {
+      return 'Please check your email and click the confirmation link before signing in.';
+    }
+    if (error.message.includes('Too many requests')) {
+      return 'Too many sign-in attempts. Please wait a few minutes before trying again.';
+    }
+    if (error.message.includes('Database error')) {
+      return 'Account creation blocked by server rules—please retry in a few moments.';
+    }
+    return error.message;
+  };
+
   const signInWithPassword = async (email: string, password: string) => {
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -99,7 +141,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         toast({
           variant: "destructive",
           title: "Sign in failed",
-          description: error.message,
+          description: getErrorMessage(error),
         });
       } else {
         toast({
@@ -111,6 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { error };
     } catch (error) {
       const authError = error as AuthError;
+      console.error('Sign in error:', authError);
       toast({
         variant: "destructive",
         title: "Sign in failed",
@@ -124,7 +167,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const redirectUrl = `${window.location.origin}/`;
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -136,25 +179,52 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
       
       if (error) {
+        let errorMessage = getErrorMessage(error);
+        
+        // Handle specific sign-up errors
+        if (error.message.includes('User already registered')) {
+          errorMessage = 'An account with this email already exists. Try signing in instead.';
+        } else if (error.message.includes('Signup is disabled')) {
+          errorMessage = 'Account registration is currently disabled. Please contact support.';
+        } else if (error.message.includes('Password should be')) {
+          errorMessage = 'Password must be at least 6 characters long.';
+        }
+        
         toast({
           variant: "destructive",
           title: "Sign up failed",
-          description: error.message,
+          description: errorMessage,
         });
       } else {
-        toast({
-          title: "Check your email",
-          description: "We've sent you a confirmation link to complete your registration.",
-        });
+        // If user is immediately confirmed, create profile
+        if (data.user && data.session) {
+          await createProfile(data.user.id, displayName);
+          toast({
+            title: "Account created!",
+            description: "You've been signed in successfully.",
+          });
+        } else {
+          toast({
+            title: "Check your email",
+            description: "We've sent you a confirmation link to complete your registration.",
+          });
+        }
       }
       
       return { error };
     } catch (error) {
       const authError = error as AuthError;
+      console.error('Sign up error:', authError);
+      
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      if (authError.message?.includes('Database error')) {
+        errorMessage = "Account creation blocked by server rules—please retry in a few moments.";
+      }
+      
       toast({
         variant: "destructive",
         title: "Sign up failed",
-        description: "An unexpected error occurred. Please try again.",
+        description: errorMessage,
       });
       return { error: authError };
     }
