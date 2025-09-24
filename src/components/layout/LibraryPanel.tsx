@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Library, ChevronLeft, ChevronRight, Maximize2, Minimize2, X, Music, Users, Folder } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { mockBooks, mockPodcasts, mockEducationalContent, mockStudentContent } from '@/data/mockData';
 
 interface LibraryPanelProps {
   isCollapsed?: boolean;
@@ -20,6 +21,30 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({
   const [showCreatePopup, setShowCreatePopup] = useState(false);
 
   const filters = ['All', 'Downloads', 'Authors', 'Favorites', 'Recent', 'Playlists', 'Books', 'Audiobooks', 'Podcasts'];
+
+  // Combine all content for display
+  const allLibraryContent = [
+    ...mockBooks,
+    ...mockPodcasts,
+    ...mockEducationalContent,
+    ...mockStudentContent
+  ];
+
+  // Filter content based on active filter
+  const getFilteredContent = () => {
+    switch (activeFilter) {
+      case 'Books':
+        return allLibraryContent.filter(item => item.type === 'ebook');
+      case 'Audiobooks':
+        return allLibraryContent.filter(item => item.type === 'audiobook');
+      case 'Podcasts':
+        return allLibraryContent.filter(item => item.type === 'podcast');
+      default:
+        return allLibraryContent;
+    }
+  };
+
+  const filteredContent = getFilteredContent();
 
   return (
     <aside className="h-full w-full transition-all duration-300 flex flex-col">
@@ -209,16 +234,41 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({
                 : 'repeat(auto-fit, minmax(80px, 1fr))' 
             }}
           >
-            {/* Placeholder library items - only avatars/photos */}
-              {Array.from({ length: 30 }).map((_, index) => (
-                <div key={index} className="flex items-center justify-center p-2 transition-all duration-200 cursor-pointer">
-                  <div className={cn(
-                    "bg-[#333333] flex-shrink-0 transition-all duration-200 hover:bg-[#404040]",
-                    isExpanded ? "w-24 h-24" : "w-20 h-20",
-                    index % 3 === 0 ? "rounded-lg" : "rounded-full"
-                  )} />
+            {/* Actual library items with real images */}
+            {filteredContent.slice(0, 30).map((item, index) => (
+              <div key={item.id} className="flex items-center justify-center p-2 transition-all duration-200 cursor-pointer group">
+                <div className={cn(
+                  "flex-shrink-0 transition-all duration-200 hover:scale-105 relative overflow-hidden",
+                  isExpanded ? "w-24 h-24" : "w-20 h-20",
+                  index % 3 === 0 ? "rounded-lg" : "rounded-full"
+                )}>
+                  <img 
+                    src={item.cover} 
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback to a placeholder if image fails to load
+                      e.currentTarget.src = '/placeholder.svg';
+                    }}
+                  />
+                  {/* Progress indicator for items with progress */}
+                  {item.progress && item.progress > 0 && (
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/20">
+                      <div 
+                        className="h-full bg-white transition-all duration-300" 
+                        style={{ width: `${item.progress}%` }}
+                      />
+                    </div>
+                  )}
+                  {/* Type indicator */}
+                  <div className="absolute top-1 right-1 w-3 h-3 rounded-full bg-white/80 flex items-center justify-center">
+                    {item.type === 'ebook' && <span className="text-xs">📖</span>}
+                    {item.type === 'audiobook' && <span className="text-xs">🎧</span>}
+                    {item.type === 'podcast' && <span className="text-xs">🎙️</span>}
+                  </div>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -310,12 +360,27 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({
           </div>
           
           {/* Library items */}
-          {Array.from({ length: 12 }).map((_, index) => (
-            <div key={index} className="flex items-center justify-center p-1">
+          {filteredContent.slice(0, 12).map((item, index) => (
+            <div key={item.id} className="flex items-center justify-center p-1">
               <div className={cn(
-                "w-12 h-12 bg-[#333333] flex-shrink-0 transition-all duration-200 hover:bg-[#404040] cursor-pointer",
+                "w-12 h-12 flex-shrink-0 transition-all duration-200 hover:scale-105 cursor-pointer relative overflow-hidden",
                 index % 3 === 0 ? "rounded-lg" : "rounded-full"
-              )} />
+              )}>
+                <img 
+                  src={item.cover} 
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = '/placeholder.svg';
+                  }}
+                />
+                {/* Type indicator for collapsed view */}
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-white/90 flex items-center justify-center">
+                  {item.type === 'ebook' && <span className="text-xs">📖</span>}
+                  {item.type === 'audiobook' && <span className="text-xs">🎧</span>}
+                  {item.type === 'podcast' && <span className="text-xs">🎙️</span>}
+                </div>
+              </div>
             </div>
           ))}
         </div>
