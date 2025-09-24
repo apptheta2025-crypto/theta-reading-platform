@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Library, ChevronLeft, ChevronRight, Maximize2, Minimize2, X, Music, Users, Folder } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -19,6 +19,24 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({
 }) => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [showCreatePopup, setShowCreatePopup] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  // Close popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setShowCreatePopup(false);
+      }
+    };
+
+    if (showCreatePopup) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCreatePopup]);
 
   const filters = ['All', 'Downloads', 'Authors', 'Favorites', 'Recent', 'Playlists', 'Books', 'Audiobooks', 'Podcasts'];
 
@@ -115,11 +133,12 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({
               {/* Create Options Popup */}
               {showCreatePopup && (
                 <div 
+                  ref={popupRef}
                   className="absolute top-12 left-0 z-50 opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards]"
                   onClick={(e) => e.stopPropagation()}
                   style={{ transform: 'translateX(-50%)' }}
                 >
-                    <div className="bg-[#282828] rounded-xl p-4 w-64 shadow-2xl">
+                  <div className="bg-[#282828] rounded-xl p-4 w-64 shadow-2xl">
                       <div className="space-y-2">
                         {/* Playlist Option */}
                         <div 
@@ -275,7 +294,7 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({
 
       {/* Collapsed state - show only icons */}
       {isCollapsed && (
-        <div className="flex-1 p-2 space-y-2 overflow-y-auto">
+        <div className="flex-1 p-2 space-y-2 overflow-y-auto relative">
           {/* Plus icon at the top */}
           <div className="flex items-center justify-center p-1">
             <div className="relative">
@@ -296,7 +315,8 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({
               {/* Create Options Popup */}
               {showCreatePopup && (
                 <div 
-                  className="absolute top-12 left-0 z-50 opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards]"
+                  ref={popupRef}
+                  className="absolute top-12 left-1/2 z-[100] opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards]"
                   onClick={(e) => e.stopPropagation()}
                   style={{ transform: 'translateX(-50%)' }}
                 >
