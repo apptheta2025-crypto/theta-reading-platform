@@ -316,9 +316,8 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({
               {showCreatePopup && (
                 <div 
                   ref={popupRef}
-                  className="absolute top-12 left-1/2 z-[100] opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards]"
+                  className="fixed top-20 left-4 z-[100] opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards]"
                   onClick={(e) => e.stopPropagation()}
-                  style={{ transform: 'translateX(-50%)' }}
                 >
                   <div className="bg-[#181818] rounded-xl p-4 w-64 shadow-2xl border border-[#282828]">
                     <div className="space-y-2">
