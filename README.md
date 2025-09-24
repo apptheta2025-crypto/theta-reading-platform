@@ -1,73 +1,102 @@
-# Welcome to your Lovable project
+# Theta Reading Platform
 
-## Project info
+A modern reading platform built with React, TypeScript, and Supabase. Features include ebook reading, audiobook listening, and user management.
 
-**URL**: https://lovable.dev/projects/cf25b34e-b3ef-4cf0-a2ab-eb0b343d1075
+## Features
 
-## How can I edit this code?
+- 📚 **Ebook Reading**: Support for PDF and EPUB formats
+- 🎧 **Audiobook Listening**: High-quality audio playback
+- 👤 **User Authentication**: Secure login and registration
+- 📱 **Responsive Design**: Works on desktop and mobile
+- 🎨 **Modern UI**: Built with Tailwind CSS and shadcn/ui
+- 🔒 **Secure**: Powered by Supabase for backend services
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **Backend**: Supabase (Database, Auth, Storage)
+- **State Management**: React Context API
+- **Routing**: React Router
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/cf25b34e-b3ef-4cf0-a2ab-eb0b343d1075) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js 18+ 
+- npm or yarn
+- Supabase account
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+```bash
+git clone https://github.com/apptheta2025-crypto/theta-reading-platform.git
+cd theta-reading-platform
+```
 
-Follow these steps:
+2. Install dependencies:
+```bash
+npm install
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. Set up environment variables:
+```bash
+cp .env.example .env.local
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+4. Configure your Supabase credentials in `.env.local`:
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+5. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Deployment
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Vercel (Recommended)
 
-**Use GitHub Codespaces**
+1. Connect your GitHub repository to Vercel
+2. Vercel will automatically detect the Vite configuration
+3. Add your environment variables in the Vercel dashboard
+4. Deploy!
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Netlify
 
-## What technologies are used for this project?
+1. Connect your GitHub repository to Netlify
+2. Set build command: `npm run build`
+3. Set publish directory: `dist`
+4. Add your environment variables
+5. Deploy!
 
-This project is built with:
+## Project Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+src/
+├── components/          # Reusable UI components
+│   ├── auth/           # Authentication components
+│   ├── layout/         # Layout components
+│   ├── media/          # Media player components
+│   └── ui/             # Base UI components
+├── contexts/           # React contexts
+├── hooks/              # Custom React hooks
+├── integrations/       # External service integrations
+├── pages/              # Page components
+├── services/           # Utility services
+└── data/               # Mock data and mappings
+```
 
-## How can I deploy this project?
+## Contributing
 
-Simply open [Lovable](https://lovable.dev/projects/cf25b34e-b3ef-4cf0-a2ab-eb0b343d1075) and click on Share -> Publish.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-## Can I connect a custom domain to my Lovable project?
+## License
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+This project is licensed under the MIT License.
