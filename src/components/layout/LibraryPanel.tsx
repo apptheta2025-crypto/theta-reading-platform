@@ -48,7 +48,7 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({
                 <div className="relative w-7 h-7 flex items-center justify-center">
                   {/* Library Icon - Hidden on hover */}
                   <img 
-                    src="/library-icon.png"
+                    src="/image.png"
                     alt="Library Icon"
                     className="w-7 h-7 group-hover:opacity-0 transition-opacity duration-200"
                   />
