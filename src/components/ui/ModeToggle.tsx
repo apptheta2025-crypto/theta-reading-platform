@@ -5,14 +5,30 @@ import { cn } from '@/lib/utils';
 import { useMode } from '@/contexts/ModeContext';
 
 const ModeToggle: React.FC = () => {
-  const { mode, toggleMode } = useMode();
+  const { mode, setMode } = useMode();
+
+  console.log('ModeToggle - Component rendered with mode:', mode);
+
+  const handleReadClick = () => {
+    console.log('ModeToggle - Read button clicked, current mode:', mode);
+    console.log('ModeToggle - Setting mode to read');
+    setMode('read');
+    console.log('ModeToggle - Mode set to read');
+  };
+
+  const handleListenClick = () => {
+    console.log('ModeToggle - Listen button clicked, current mode:', mode);
+    console.log('ModeToggle - Setting mode to listen');
+    setMode('listen');
+    console.log('ModeToggle - Mode set to listen');
+  };
 
   return (
     <div className="flex items-center bg-surface-mid rounded-lg p-1">
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => mode !== 'read' && toggleMode()}
+        onClick={handleReadClick}
         className={cn(
           "p-2 h-8 w-8 transition-all duration-200",
           mode === 'read' 
@@ -28,7 +44,7 @@ const ModeToggle: React.FC = () => {
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => mode !== 'listen' && toggleMode()}
+        onClick={handleListenClick}
         className={cn(
           "p-2 h-8 w-8 transition-all duration-200",
           mode === 'listen' 

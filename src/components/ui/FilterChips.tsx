@@ -25,17 +25,17 @@ const FilterChips: React.FC<FilterChipsProps> = ({ onFilterChange, className }) 
   };
 
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
+    <div className={cn("flex flex-wrap gap-3", className)}>
       {filters.map((filter) => (
         <button
           key={filter}
           onClick={() => handleFilterClick(filter)}
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
-            "focus:outline-none focus:ring-2 focus:ring-brand-primary/50",
+            "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+            "focus:theta-focus border-2",
             activeFilter === filter
-              ? "bg-brand-primary text-white shadow-sm"
-              : "bg-surface-mid text-text-secondary hover:bg-surface-mid/80 hover:text-foreground"
+              ? "bg-theta-purple text-white border-theta-purple shadow-sm"
+              : "bg-surface-mid text-text-secondary border-border hover:bg-surface-high hover:text-foreground hover:border-theta-purple"
           )}
           aria-pressed={activeFilter === filter}
         >

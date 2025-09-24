@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Play, ExternalLink } from 'lucide-react';
@@ -23,16 +24,27 @@ const SponsoredTile: React.FC<SponsoredTileProps> = ({
   ctaUrl,
   className
 }) => {
+  const navigate = useNavigate();
+  
   const handleClick = () => {
     if (ctaUrl) {
-      window.open(ctaUrl, '_blank', 'noopener,noreferrer');
+      // If it's an external URL, open in new tab
+      if (ctaUrl.startsWith('http')) {
+        window.open(ctaUrl, '_blank', 'noopener,noreferrer');
+      } else {
+        // If it's an internal route, navigate to it
+        navigate(ctaUrl);
+      }
+    } else if (title.includes('Ruskin Bond')) {
+      // Special case for Ruskin Bond - navigate to an ebook
+      navigate('/ebook/rb1');
     }
   };
 
   return (
     <div className={cn(
-      "relative overflow-hidden rounded-xl h-48 w-full group cursor-pointer",
-      "transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg",
+      "relative overflow-hidden rounded-3xl h-64 w-full group cursor-pointer glass-tile",
+      "transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-accent-primary/20",
       className
     )} 
     onClick={handleClick}
@@ -52,73 +64,64 @@ const SponsoredTile: React.FC<SponsoredTileProps> = ({
         style={{ backgroundColor }}
       />
       
-      {/* Background image */}
-      <div className="absolute inset-0 flex items-center justify-end pr-6">
-        <img 
-          src={backgroundImage}
-          alt=""
-          className="h-full w-auto object-cover opacity-90"
-          role="presentation"
-        />
-      </div>
-
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
-
-      {/* Content */}
-      <div className="relative h-full flex flex-col justify-between p-6">
-        {/* Header */}
-        <div className="flex items-start justify-between">
-          <Badge 
-            variant="secondary"
-            className="bg-black/20 text-white border-white/20 text-xs"
-          >
-            Sponsored
-          </Badge>
+      {/* Content Layout - matching reference */}
+      <div className="relative h-full flex items-center p-8">
+        {/* Left side - Text content */}
+        <div className="flex-1 space-y-4">
+          <div className="space-y-2">
+            <p className="text-white text-lg font-medium">Start With</p>
+            <h3 className="text-4xl font-bold text-black leading-tight">
+              Ruskin Bond
+            </h3>
+          </div>
           
+          {/* CTA */}
           <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 bg-white/10 hover:bg-white/20 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            aria-label="Play sponsored content"
+            variant="secondary"
+            size="lg"
+            className="bg-black hover:bg-gray-800 text-white text-sm font-medium px-6 py-3 rounded-full"
             onClick={(e) => {
               e.stopPropagation();
-              // Handle play action
+              handleClick();
             }}
           >
-            <Play className="w-4 h-4 ml-0.5" />
+            Explore Collection
           </Button>
         </div>
 
-        {/* Title and description */}
-        <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white leading-tight">
-            {title}
-          </h3>
-          <p className="text-white/90 text-sm leading-relaxed">
-            {description}
-          </p>
+        {/* Right side - Images */}
+        <div className="flex items-center gap-4">
+          {/* Book covers */}
+          <div className="flex gap-2">
+            <div className="w-16 h-20 bg-white/20 rounded-lg flex items-center justify-center">
+              <span className="text-xs font-bold text-black">RUSKIN BOND</span>
+            </div>
+            <div className="w-16 h-20 bg-white/20 rounded-lg flex items-center justify-center">
+              <span className="text-xs font-bold text-black">The Blue Umbrella</span>
+            </div>
+          </div>
           
-          {/* CTA */}
-          <div className="flex items-center gap-2 mt-3">
-            <Button
-              variant="secondary"
-              size="sm"
-              className="bg-white/90 hover:bg-white text-gray-900 text-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleClick();
-              }}
-            >
-              {ctaText}
-              <ExternalLink className="w-3 h-3 ml-1" />
-            </Button>
+          {/* Author image */}
+          <div className="w-20 h-20 rounded-full bg-white/30 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center">
+              <span className="text-xs font-bold text-gray-600">RB</span>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Sponsored badge */}
+      <div className="absolute top-4 right-4">
+        <Badge 
+          variant="secondary"
+          className="bg-black/20 text-white border-white/20 text-xs px-2 py-1"
+        >
+          • Sponsored
+        </Badge>
+      </div>
+
       {/* Hover effect overlay */}
-      <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+      <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
     </div>
   );
 };

@@ -1,5 +1,25 @@
 import { MediaItem } from '@/contexts/PlayerContext';
 
+// Extended interface for detailed ebook information
+export interface EbookDetails extends MediaItem {
+  description: string;
+  rating: number;
+  totalReviews: number;
+  totalPages: number;
+  genre: string[];
+  language: string;
+  publishDate: string;
+  isbn?: string;
+  pdfUrl?: string;
+  reviews?: {
+    id: string;
+    user: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }[];
+}
+
 // Mock data for the app
 export const mockBooks: MediaItem[] = [
   {
@@ -17,7 +37,7 @@ export const mockBooks: MediaItem[] = [
     author: 'James Clear',
     cover: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop',
     duration: 7200, // 2 hours
-    type: 'audiobook',
+    type: 'ebook',
     progress: 23
   },
   {
@@ -45,6 +65,228 @@ export const mockBooks: MediaItem[] = [
     cover: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop',
     duration: 3000, // 50 minutes
     type: 'audiobook'
+  }
+];
+
+// Detailed ebook information
+export const mockEbookDetails: EbookDetails[] = [
+  {
+    id: '1',
+    title: 'The Midnight Library',
+    author: 'Matt Haig',
+    cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop',
+    duration: 3600,
+    type: 'ebook',
+    progress: 45,
+    description: 'Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived. To see how things would be if you had made other choices... Would you have done anything different, if you had the chance to undo your regrets?',
+    rating: 4.2,
+    totalReviews: 1250,
+    totalPages: 304,
+    genre: ['Fiction', 'Fantasy', 'Philosophy'],
+    language: 'English',
+    publishDate: '2020-08-13',
+    isbn: '978-0-525-55847-3',
+    pdfUrl: '/The_Essential_Collection_for_Young_Readers_-_Ruskin_Bond.pdf',
+    reviews: [
+      {
+        id: 'r1',
+        user: 'Sarah M.',
+        rating: 5,
+        comment: 'A beautifully written exploration of life, choices, and what-ifs. Matt Haig has created something truly special here.',
+        date: '2024-01-15'
+      },
+      {
+        id: 'r2',
+        user: 'David K.',
+        rating: 4,
+        comment: 'Thought-provoking and emotional. The concept is brilliant, though it gets a bit repetitive in the middle.',
+        date: '2024-01-10'
+      },
+      {
+        id: 'r3',
+        user: 'Emma L.',
+        rating: 5,
+        comment: 'This book changed my perspective on life. Absolutely loved every page.',
+        date: '2024-01-08'
+      }
+    ]
+  },
+  {
+    id: '4',
+    title: 'Sapiens',
+    author: 'Yuval Noah Harari',
+    cover: 'https://images.unsplash.com/photo-1471023492936-306aae14d87b?w=400&h=600&fit=crop',
+    duration: 4800,
+    type: 'ebook',
+    progress: 12,
+    description: 'From a renowned historian comes a groundbreaking narrative of humanity\'s creation and evolution—a #1 international bestseller—that explores the ways in which biology and history have defined us and enhanced our understanding of what it means to be "human."',
+    rating: 4.6,
+    totalReviews: 2100,
+    totalPages: 443,
+    genre: ['History', 'Anthropology', 'Science'],
+    language: 'English',
+    publishDate: '2014-02-10',
+    isbn: '978-0-06-231609-7',
+    pdfUrl: '/The_Essential_Collection_for_Young_Readers_-_Ruskin_Bond.pdf',
+    reviews: [
+      {
+        id: 'r4',
+        user: 'Michael R.',
+        rating: 5,
+        comment: 'Mind-blowing book that completely changed how I think about human history and our place in the world.',
+        date: '2024-01-20'
+      },
+      {
+        id: 'r5',
+        user: 'Lisa T.',
+        rating: 4,
+        comment: 'Fascinating read, though some of the conclusions are controversial. Still highly recommend.',
+        date: '2024-01-18'
+      }
+    ]
+  },
+  {
+    id: '2',
+    title: 'Atomic Habits',
+    author: 'James Clear',
+    cover: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop',
+    duration: 7200,
+    type: 'ebook',
+    progress: 23,
+    description: 'No matter your goals, Atomic Habits offers a proven framework for improving--every day. James Clear, one of the world\'s leading experts on habit formation, reveals practical strategies that will teach you exactly how to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results.',
+    rating: 4.8,
+    totalReviews: 3400,
+    totalPages: 320,
+    genre: ['Self-Help', 'Psychology', 'Business'],
+    language: 'English',
+    publishDate: '2018-10-16',
+    isbn: '978-0-7352-1129-2',
+    pdfUrl: '/The_Essential_Collection_for_Young_Readers_-_Ruskin_Bond.pdf',
+    reviews: [
+      {
+        id: 'r6',
+        user: 'John P.',
+        rating: 5,
+        comment: 'This book literally changed my life. The 1% rule is so simple yet powerful.',
+        date: '2024-01-22'
+      },
+      {
+        id: 'r7',
+        user: 'Anna S.',
+        rating: 5,
+        comment: 'Clear, actionable advice that actually works. I\'ve implemented several strategies from this book.',
+        date: '2024-01-19'
+      }
+    ]
+  },
+  {
+    id: 'rb1',
+    title: 'The Essential Collection for Young Readers',
+    author: 'Ruskin Bond',
+    cover: '/book banner.jpg',
+    duration: 5400, // 1.5 hours
+    type: 'ebook',
+    progress: 0,
+    description: 'A timeless collection of Ruskin Bond\'s most beloved stories for young readers. This essential anthology brings together his finest tales of friendship, adventure, and the simple joys of life in the mountains. From the charming adventures of Rusty to the heartwarming stories of children discovering the magic of nature, this collection is a perfect introduction to one of India\'s most cherished storytellers.',
+    rating: 4.9,
+    totalReviews: 850,
+    totalPages: 149,
+    genre: ['Children\'s Literature', 'Fiction', 'Adventure'],
+    language: 'English',
+    publishDate: '2020-03-15',
+    isbn: '978-81-291-4567-8',
+    pdfUrl: '/The_Essential_Collection_for_Young_Readers_-_Ruskin_Bond.pdf',
+    reviews: [
+      {
+        id: 'rb1',
+        user: 'Priya S.',
+        rating: 5,
+        comment: 'My children absolutely love these stories! Ruskin Bond has a magical way of bringing the mountains to life.',
+        date: '2024-01-20'
+      },
+      {
+        id: 'rb2',
+        user: 'Rahul K.',
+        rating: 5,
+        comment: 'A perfect collection for young readers. The stories are timeless and beautifully written.',
+        date: '2024-01-18'
+      },
+      {
+        id: 'rb3',
+        user: 'Meera P.',
+        rating: 4,
+        comment: 'Wonderful stories that capture the essence of childhood and nature. Highly recommended for kids and adults alike.',
+        date: '2024-01-15'
+      }
+    ]
+  },
+  {
+    id: 'rb1-audio',
+    title: 'The Essential Collection for Young Readers (Audiobook)',
+    author: 'Ruskin Bond',
+    cover: '/book banner.jpg',
+    duration: 5400, // 1.5 hours
+    type: 'audiobook',
+    progress: 0,
+    description: 'A timeless collection of Ruskin Bond\'s most beloved stories for young readers. This essential anthology brings together his finest tales of friendship, adventure, and the simple joys of life in the mountains. From the charming adventures of Rusty to the heartwarming stories of children discovering the magic of nature, this collection is a perfect introduction to one of India\'s most cherished storytellers.',
+    rating: 4.9,
+    totalReviews: 850,
+    totalPages: 149,
+    genre: ['Children\'s Literature', 'Fiction', 'Adventure'],
+    language: 'English',
+    publishDate: '2020-03-15',
+    isbn: '978-81-291-4567-8',
+    audioUrl: '/Ruskin%20Bond%20Essentizls%20to%20Life/RuskinBondTheEssentialCollectionforYoungReaders_ep6.mp3',
+    reviews: [
+      {
+        id: 'rb1-audio-1',
+        user: 'Priya S.',
+        rating: 5,
+        comment: 'The audiobook version is amazing! Perfect for bedtime stories and long car rides.',
+        date: '2024-01-20'
+      },
+      {
+        id: 'rb1-audio-2',
+        user: 'Rahul K.',
+        rating: 5,
+        comment: 'Narrated beautifully. The voice brings Ruskin Bond\'s stories to life in a whole new way.',
+        date: '2024-01-18'
+      }
+    ]
+  },
+  {
+    id: 'rb1-audio',
+    title: 'The Essential Collection for Young Readers (Audiobook)',
+    author: 'Ruskin Bond',
+    cover: '/book banner.jpg',
+    duration: 5400, // 1.5 hours
+    type: 'audiobook',
+    progress: 0,
+    description: 'A timeless collection of Ruskin Bond\'s most beloved stories for young readers. This essential anthology brings together his finest tales of friendship, adventure, and the simple joys of life in the mountains. From the charming adventures of Rusty to the heartwarming stories of children discovering the magic of nature, this collection is a perfect introduction to one of India\'s most cherished storytellers.',
+    rating: 4.9,
+    totalReviews: 850,
+    totalPages: 149,
+    genre: ['Children\'s Literature', 'Fiction', 'Adventure'],
+    language: 'English',
+    publishDate: '2020-03-15',
+    isbn: '978-81-291-4567-8',
+    audioUrl: '/Ruskin%20Bond%20Essentizls%20to%20Life/RuskinBondTheEssentialCollectionforYoungReaders_ep6.mp3',
+    reviews: [
+      {
+        id: 'rb1-audio-1',
+        user: 'Priya S.',
+        rating: 5,
+        comment: 'The audiobook version is amazing! Perfect for bedtime stories and long car rides.',
+        date: '2024-01-20'
+      },
+      {
+        id: 'rb1-audio-2',
+        user: 'Rahul K.',
+        rating: 5,
+        comment: 'Narrated beautifully. The voice brings Ruskin Bond\'s stories to life in a whole new way.',
+        date: '2024-01-18'
+      }
+    ]
   }
 ];
 

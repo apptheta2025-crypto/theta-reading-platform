@@ -11,7 +11,8 @@ import {
   Download,
   Plus,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -47,34 +48,34 @@ const NavRail: React.FC = () => {
 
   return (
     <aside className={cn(
-      "h-screen bg-surface-low border-r border-border transition-all duration-300 flex flex-col",
-      collapsed ? "w-18" : "w-60"
+      "h-screen theta-surface transition-all duration-300 flex flex-col",
+      collapsed ? "w-16" : "w-64"
     )}>
-      {/* Header with toggle */}
-      <div className="flex items-center justify-between p-4 border-b border-border">
+      {/* Header with Theta branding */}
+      <div className="flex items-center justify-between p-6 border-b-2 border-theta-purple">
         {!collapsed && (
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
-              <span className="text-sm font-bold text-white">Θ</span>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-theta-purple rounded-lg flex items-center justify-center">
+              <span className="text-lg font-bold text-white">Θ</span>
             </div>
-            <span className="font-semibold text-foreground">Theta</span>
+            <span className="font-heading font-bold text-foreground text-lg">Theta</span>
           </div>
         )}
         <button
           onClick={toggleCollapsed}
-          className="p-2 hover:bg-surface-mid rounded-lg transition-colors"
+          className="p-2 hover:bg-surface-mid rounded transition-colors focus:theta-focus"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? (
-            <ChevronRight className="w-4 h-4 text-text-secondary" />
+            <ChevronRight className="w-5 h-5 text-text-secondary" />
           ) : (
-            <ChevronLeft className="w-4 h-4 text-text-secondary" />
+            <ChevronLeft className="w-5 h-5 text-text-secondary" />
           )}
         </button>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-2 space-y-1">
+      <nav className="flex-1 p-4 space-y-2">
         {/* Primary navigation */}
         {primaryItems.map((item) => {
           const Icon = item.icon;
@@ -85,29 +86,27 @@ const NavRail: React.FC = () => {
               key={item.href}
               to={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group",
-                "hover:bg-surface-mid focus:bg-surface-mid focus:outline-none focus:ring-2 focus:ring-brand-primary/50",
-                active && "bg-brand-muted text-brand-primary font-medium",
-                !active && "text-text-secondary hover:text-foreground"
+                "flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 group",
+                "hover:bg-surface-mid focus:theta-focus",
+                active && "bg-theta-purple text-white shadow-sm",
+                !active && "text-text-secondary hover:text-foreground hover:bg-surface-mid"
               )}
               aria-label={collapsed ? item.label : undefined}
             >
               <Icon className={cn(
                 "w-5 h-5 flex-shrink-0 transition-colors",
-                active && "text-brand-primary"
+                active && "text-white",
+                !active && "text-text-secondary group-hover:text-foreground"
               )} />
               {!collapsed && (
-                <span className="truncate">{item.label}</span>
-              )}
-              {active && !collapsed && (
-                <div className="w-1 h-1 bg-brand-primary rounded-full ml-auto" />
+                <span className="font-medium truncate">{item.label}</span>
               )}
             </NavLink>
           );
         })}
 
         {/* Separator */}
-        <div className="h-px bg-border my-4" />
+        <div className="theta-divider my-6" />
 
         {/* Secondary navigation */}
         {secondaryItems.map((item) => {
@@ -119,50 +118,52 @@ const NavRail: React.FC = () => {
               key={item.href}
               to={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200",
-                "hover:bg-surface-mid focus:bg-surface-mid focus:outline-none focus:ring-2 focus:ring-brand-primary/50",
-                active && "bg-brand-muted text-brand-primary font-medium",
-                !active && "text-text-secondary hover:text-foreground"
+                "flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200",
+                "hover:bg-surface-mid focus:theta-focus",
+                active && "bg-theta-purple/20 text-theta-purple border border-theta-purple/30",
+                !active && "text-text-secondary hover:text-foreground hover:bg-surface-mid"
               )}
               aria-label={collapsed ? item.label : undefined}
             >
               <Icon className={cn(
-                "w-4 h-4 flex-shrink-0 transition-colors",
-                active && "text-brand-primary"
+                "w-5 h-5 flex-shrink-0 transition-colors",
+                active && "text-theta-purple",
+                !active && "text-text-secondary group-hover:text-foreground"
               )} />
               {!collapsed && (
-                <span className="truncate text-sm">{item.label}</span>
+                <span className="font-medium truncate text-sm">{item.label}</span>
               )}
             </NavLink>
           );
         })}
 
-        {/* Add playlist button */}
+
+        {/* Add playlist button - Clear CTA */}
         <button
           className={cn(
-            "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 w-full",
-            "hover:bg-surface-mid focus:bg-surface-mid focus:outline-none focus:ring-2 focus:ring-brand-primary/50",
-            "text-text-secondary hover:text-foreground"
+            "flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 w-full",
+            "hover:bg-surface-mid focus:theta-focus",
+            "text-text-secondary hover:text-foreground hover:bg-surface-mid"
           )}
           aria-label={collapsed ? "Create playlist" : undefined}
         >
-          <Plus className="w-4 h-4 flex-shrink-0" />
+          <Plus className="w-5 h-5 flex-shrink-0" />
           {!collapsed && (
-            <span className="truncate text-sm">Create Playlist</span>
+            <span className="font-medium truncate text-sm">Create Playlist</span>
           )}
         </button>
       </nav>
 
-      {/* User section - if not collapsed */}
+      {/* User section - Clean and professional */}
       {!collapsed && (
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center">
-              <span className="text-sm font-medium text-white">U</span>
+        <div className="p-6 border-t-2 border-border">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-theta-purple rounded-lg flex items-center justify-center">
+              <span className="text-sm font-bold text-white">U</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">User</p>
-              <p className="text-xs text-text-secondary truncate">Free Plan</p>
+              <p className="font-semibold text-foreground truncate">User</p>
+              <p className="text-sm text-text-secondary truncate">Free Plan</p>
             </div>
           </div>
         </div>

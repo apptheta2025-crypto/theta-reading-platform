@@ -20,27 +20,32 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         
-        /* Theta semantic colors */
+        /* Theta surface system - Solid and confident */
         surface: {
           low: "hsl(var(--surface-low))",
           mid: "hsl(var(--surface-mid))",
+          high: "hsl(var(--surface-high))",
         },
+        
+        /* Theta text hierarchy */
         text: {
           secondary: "hsl(var(--text-secondary))",
+          tertiary: "hsl(var(--text-tertiary))",
         },
         
-        /* Brand accent system */
+        /* Theta brand system - Bold and distinctive */
+        theta: {
+          purple: "hsl(var(--theta-purple))",
+          "purple-dark": "hsl(var(--theta-purple-dark))",
+          "purple-light": "hsl(var(--theta-purple-light))",
+          gold: "hsl(var(--theta-gold))",
+        },
+        
+        /* Legacy brand mapping for compatibility */
         brand: {
-          primary: "hsl(var(--accent-primary))",
-          glow: "hsl(var(--accent-glow))",
-          muted: "hsl(var(--accent-muted))",
-        },
-        
-        /* Glassmorphism colors */
-        glass: {
-          bg: "hsl(var(--glass-bg))",
-          border: "hsl(var(--glass-border))",
-          highlight: "hsl(var(--glass-highlight))",
+          primary: "hsl(var(--theta-purple))",
+          gold: "hsl(var(--theta-gold))",
+          muted: "hsl(var(--theta-purple-dark))",
         },
         
         /* Component colors mapped to Theta system */
@@ -119,16 +124,7 @@ export default {
           "0%": { opacity: "0", transform: "translateX(8px)" },
           "100%": { opacity: "1", transform: "translateX(0)" }
         },
-        "glow-pulse": {
-          "0%, 100%": { 
-            boxShadow: "0 0 0 0 hsl(var(--accent-primary) / 0.4)",
-            transform: "scale(1)"
-          },
-          "50%": { 
-            boxShadow: "0 0 20px 4px hsl(var(--accent-primary) / 0.1)",
-            transform: "scale(1.01)"
-          }
-        }
+        
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -140,7 +136,6 @@ export default {
         "scale-in": "scale-in 0.15s ease-out",
         "slide-up": "slide-up 0.2s ease-out",
         "slide-in-right": "slide-in-right 0.2s ease-out",
-        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
       },
       
       /* Theta spacing system */
@@ -151,9 +146,27 @@ export default {
         '128': '32rem',
       },
       
-      /* Theta font system */
+      /* Theta typography system - Pixel perfect from Figma */
       fontFamily: {
-        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'system-ui', 'sans-serif'],
+        'sans': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'system-ui', 'ui-sans-serif', 'Arial', 'sans-serif'],
+        'gilroy': ['Gilroy', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'system-ui', 'ui-sans-serif', 'Arial', 'sans-serif'],
+        'heading': ['Gilroy', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'system-ui', 'ui-sans-serif', 'Arial', 'sans-serif'],
+        'display': ['Gilroy', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'system-ui', 'ui-sans-serif', 'Arial', 'sans-serif'],
+        'gilroy-black': ['Gilroy', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'system-ui', 'ui-sans-serif', 'Arial', 'sans-serif'],
+      },
+      fontWeight: {
+        'black': '900', // For Gilroy-Black
+      },
+      
+      /* Theta spacing system - Generous and purposeful */
+      spacing: {
+        '18': '4.5rem',    /* 72px */
+        '22': '5.5rem',    /* 88px */
+        '26': '6.5rem',    /* 104px */
+        '30': '7.5rem',    /* 120px */
+        '88': '22rem',     /* 352px */
+        '92': '23rem',     /* 368px */
+        '128': '32rem',    /* 512px */
       },
     },
   },

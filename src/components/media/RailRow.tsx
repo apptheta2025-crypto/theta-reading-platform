@@ -33,12 +33,12 @@ const RailRow: React.FC<RailRowProps> = ({
   };
 
   return (
-    <section className={cn("py-6", className)} aria-labelledby={`${title.replace(/\s+/g, '-').toLowerCase()}-heading`}>
+    <section className={cn("glass-panel p-6", className)} aria-labelledby={`${title.replace(/\s+/g, '-').toLowerCase()}-heading`}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 px-6">
+      <div className="flex items-center justify-between mb-6">
         <h2 
           id={`${title.replace(/\s+/g, '-').toLowerCase()}-heading`}
-          className="text-xl font-bold text-foreground"
+          className="text-2xl font-bold text-foreground"
         >
           {title}
         </h2>
@@ -49,7 +49,7 @@ const RailRow: React.FC<RailRowProps> = ({
             variant="ghost"
             size="sm"
             onClick={() => scroll('left')}
-            className="h-8 w-8 p-0 hover:bg-surface-mid text-text-secondary hover:text-foreground"
+            className="h-10 w-10 p-0 hover:bg-white/10 text-text-secondary hover:text-foreground rounded-2xl backdrop-blur-sm border border-white/10 transition-all duration-300"
             aria-label={`Scroll ${title} left`}
           >
             <ChevronLeft className="w-4 h-4" />
@@ -58,7 +58,7 @@ const RailRow: React.FC<RailRowProps> = ({
             variant="ghost"
             size="sm"
             onClick={() => scroll('right')}
-            className="h-8 w-8 p-0 hover:bg-surface-mid text-text-secondary hover:text-foreground"
+            className="h-10 w-10 p-0 hover:bg-white/10 text-text-secondary hover:text-foreground rounded-2xl backdrop-blur-sm border border-white/10 transition-all duration-300"
             aria-label={`Scroll ${title} right`}
           >
             <ChevronRight className="w-4 h-4" />
@@ -69,11 +69,11 @@ const RailRow: React.FC<RailRowProps> = ({
       {/* Items rail */}
       <div 
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide pl-6 pr-6 snap-x snap-mandatory"
+        className="rail-container flex gap-6 overflow-x-auto scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {items.map((item, index) => (
-          <div key={`${item.id}-${index}`} className="snap-start flex-shrink-0">
+          <div key={`${item.id}-${index}`} className="rail-item">
             <MediaCard 
               item={item} 
               showProgress={showProgress}
@@ -83,10 +83,10 @@ const RailRow: React.FC<RailRowProps> = ({
         ))}
         
         {/* Show all button */}
-        <div className="snap-start flex-shrink-0 w-48 flex items-center justify-center">
+        <div className="rail-item w-48 flex items-center justify-center">
           <Button
             variant="outline"
-            className="h-full min-h-[280px] border-dashed border-border hover:border-brand-primary/50 text-text-secondary hover:text-foreground"
+            className="h-full min-h-[280px] border-dashed border-border/50 hover:border-brand-primary/50 text-text-secondary hover:text-foreground focus:outline-none focus:ring-2 focus:ring-brand-primary/50 rounded-xl"
           >
             Show all
           </Button>

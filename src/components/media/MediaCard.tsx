@@ -1,5 +1,6 @@
 import React from 'react';
-import { Play, Headphones, Book, Clock, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Play, Headphones, Book, Clock, Star, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -21,9 +22,20 @@ const MediaCard: React.FC<MediaCardProps> = ({
 }) => {
   const { play } = usePlayer();
   const { mode } = useMode();
+  const navigate = useNavigate();
 
   const handlePlay = () => {
-    play(item);
+    if (item.type === 'ebook') {
+      navigate(`/ebook/${item.id}`);
+    } else {
+      play(item);
+    }
+  };
+
+  const handleCardClick = () => {
+    if (item.type === 'ebook') {
+      navigate(`/ebook/${item.id}`);
+    }
   };
 
   const formatDuration = (seconds: number) => {
@@ -64,15 +76,18 @@ const MediaCard: React.FC<MediaCardProps> = ({
   };
 
   return (
-    <div className={cn(
-      "group relative bg-surface-low rounded-lg overflow-hidden transition-all duration-200",
-      "hover:bg-surface-mid focus-within:bg-surface-mid",
-      "hover:shadow-lg hover:shadow-brand-primary/10",
-      sizeClasses[size],
-      className
-    )}>
-      {/* Cover image */}
-      <div className="relative aspect-square overflow-hidden">
+    <div 
+      className={cn(
+        "group relative theta-card transition-all duration-200",
+        "hover:shadow-lg hover:-translate-y-1 focus-within:theta-focus",
+        sizeClasses[size],
+        item.type === 'ebook' && "cursor-pointer",
+        className
+      )}
+      onClick={handleCardClick}
+    >
+      {/* Cover image - Full bleed, clean */}
+      <div className="relative aspect-square overflow-hidden rounded-t">
         <img 
           src={item.cover} 
           alt={`${item.title} cover`}
@@ -80,61 +95,70 @@ const MediaCard: React.FC<MediaCardProps> = ({
           loading="lazy"
         />
         
-        {/* Type badge */}
-        <Badge 
-          variant="secondary"
-          className={cn(
-            "absolute top-2 left-2 text-xs gap-1",
-            getTypeColor()
-          )}
-        >
-          {getTypeIcon()}
-          {item.type}
-        </Badge>
+        {/* Type badge - Clean and minimal */}
+        <div className={cn(
+          "absolute top-3 left-3 px-2 py-1 rounded text-xs font-medium",
+          getTypeColor()
+        )}>
+          <div className="flex items-center gap-1">
+            {getTypeIcon()}
+            <span className="capitalize">{item.type}</span>
+          </div>
+        </div>
 
-        {/* Play button overlay */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+        {/* Action button - Bold and clear */}
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
           <Button
             onClick={handlePlay}
-            size="sm"
-            className="bg-brand-primary hover:bg-brand-glow text-white rounded-full h-12 w-12 p-0"
-            aria-label={`Play ${item.title}`}
+            size="lg"
+            className="theta-button-primary px-6 py-3 text-base font-semibold"
+            aria-label={item.type === 'ebook' ? `View ${item.title}` : `Play ${item.title}`}
           >
-            <Play className="w-5 h-5 ml-0.5" />
+            {item.type === 'ebook' ? (
+              <>
+                <BookOpen className="w-5 h-5" />
+                View Book
+              </>
+            ) : (
+              <>
+                <Play className="w-5 h-5" />
+                Play Now
+              </>
+            )}
           </Button>
         </div>
 
-        {/* Progress bar */}
+        {/* Progress bar - Clean indicator */}
         {showProgress && item.progress && (
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/20">
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/30">
             <div 
-              className="h-full bg-brand-primary transition-all duration-300"
+              className="h-full bg-theta-purple transition-all duration-300"
               style={{ width: `${item.progress}%` }}
             />
           </div>
         )}
       </div>
 
-      {/* Content */}
-      <div className="p-3">
-        <h3 className="font-medium text-foreground text-sm leading-tight truncate mb-1">
+      {/* Content - Clear hierarchy */}
+      <div className="p-4 space-y-2">
+        <h3 className="font-heading font-semibold text-foreground text-base leading-tight line-clamp-2">
           {item.title}
         </h3>
-        <p className="text-text-secondary text-xs truncate mb-2">
+        <p className="text-text-secondary text-sm line-clamp-1">
           {item.author}
         </p>
         
-        {/* Metadata */}
-        <div className="flex items-center justify-between text-xs text-text-secondary">
-          <div className="flex items-center gap-1">
-            <Clock className="w-3 h-3" />
+        {/* Metadata - Clean and organized */}
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center gap-1 text-text-secondary">
+            <Clock className="w-4 h-4" />
             <span>{formatDuration(item.duration)}</span>
           </div>
           
-          {/* Rating placeholder */}
+          {/* Rating - Clear and accessible */}
           <div className="flex items-center gap-1">
-            <Star className="w-3 h-3 fill-current text-yellow-500" />
-            <span>4.8</span>
+            <Star className="w-4 h-4 fill-current text-theta-gold" />
+            <span className="text-text-secondary font-medium">4.8</span>
           </div>
         </div>
       </div>

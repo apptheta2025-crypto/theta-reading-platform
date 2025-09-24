@@ -28,40 +28,23 @@ const MiniPlayer: React.FC = () => {
     : 0;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 h-20 bg-surface-low border-t border-border z-40">
+    <div className="fixed bottom-4 left-4 right-4 h-16 bg-surface-low/95 backdrop-blur-md border border-border/50 rounded-2xl z-40 shadow-lg">
       {/* Progress bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-surface-mid">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-surface-mid/50 rounded-t-2xl">
         <div 
-          className="h-full bg-brand-primary transition-all duration-300"
+          className="h-full bg-white transition-all duration-300 rounded-t-2xl"
           style={{ width: `${progressPercentage}%` }}
         />
       </div>
 
-      <div className="flex items-center justify-between h-full px-4">
-        {/* Current media info */}
-        <div className="flex items-center gap-3 flex-1 min-w-0">
-          <img 
-            src={state.currentItem.cover} 
-            alt={`${state.currentItem.title} cover`}
-            className="w-12 h-12 rounded-lg object-cover"
-          />
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-foreground truncate">
-              {state.currentItem.title}
-            </p>
-            <p className="text-xs text-text-secondary truncate">
-              {state.currentItem.author}
-            </p>
-          </div>
-        </div>
-
-        {/* Playback controls */}
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-center h-full px-6">
+        {/* Playback controls - centered */}
+        <div className="flex items-center gap-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => skipBackward(15)}
-            className="h-10 w-10 p-0 text-text-secondary hover:text-foreground"
+            className="h-8 w-8 p-0 text-text-secondary hover:text-foreground"
             aria-label="Skip backward 15 seconds"
           >
             <SkipBack className="w-4 h-4" />
@@ -69,7 +52,7 @@ const MiniPlayer: React.FC = () => {
 
           <Button
             onClick={togglePlay}
-            className="h-10 w-10 p-0 bg-brand-primary hover:bg-brand-glow text-white rounded-full"
+            className="h-8 w-8 p-0 bg-white hover:bg-gray-100 text-black rounded-full"
             aria-label={state.isPlaying ? "Pause" : "Play"}
           >
             {state.isPlaying ? (
@@ -83,53 +66,11 @@ const MiniPlayer: React.FC = () => {
             variant="ghost"
             size="sm"
             onClick={() => skipForward(15)}
-            className="h-10 w-10 p-0 text-text-secondary hover:text-foreground"
+            className="h-8 w-8 p-0 text-text-secondary hover:text-foreground"
             aria-label="Skip forward 15 seconds"
           >
             <SkipForward className="w-4 h-4" />
           </Button>
-        </div>
-
-        {/* Volume and additional controls */}
-        <div className="flex items-center gap-3 flex-1 justify-end">
-          {/* Time display */}
-          <div className="hidden sm:flex items-center gap-2 text-xs text-text-secondary">
-            <span>{formatTime(state.currentTime)}</span>
-            <span>/</span>
-            <span>{formatTime(state.currentItem.duration)}</span>
-          </div>
-
-          {/* Volume control */}
-          <div className="hidden md:flex items-center gap-2">
-            <Volume2 className="w-4 h-4 text-text-secondary" />
-            <Slider
-              value={[state.volume * 100]}
-              onValueChange={(value) => setVolume(value[0] / 100)}
-              max={100}
-              step={1}
-              className="w-20"
-            />
-          </div>
-
-          {/* Additional controls */}
-          <div className="hidden lg:flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0 text-text-secondary hover:text-foreground"
-              aria-label="Shuffle"
-            >
-              <Shuffle className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0 text-text-secondary hover:text-foreground"
-              aria-label="Repeat"
-            >
-              <Repeat className="w-4 h-4" />
-            </Button>
-          </div>
         </div>
       </div>
     </div>

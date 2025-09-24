@@ -21,11 +21,18 @@ const subjectIcons = {
 };
 
 const Students: React.FC = () => {
-  const { isStudentMode, toggleStudentMode } = useMode();
+  const { isStudentMode, toggleStudentMode, mode } = useMode();
   const [selectedGrade, setSelectedGrade] = useState('All');
   const [selectedSubject, setSelectedSubject] = useState('All');
 
   const filteredContent = mockStudentContent.filter(item => {
+    // Filter by mode: 'read' shows ebooks only, 'listen' shows audiobooks and podcasts
+    const matchesMode = mode === 'read' 
+      ? item.type === 'ebook'
+      : item.type === 'audiobook' || item.type === 'podcast';
+    
+    if (!matchesMode) return false;
+    
     if (selectedGrade !== 'All' && !item.title.includes(selectedGrade)) {
       return false;
     }
